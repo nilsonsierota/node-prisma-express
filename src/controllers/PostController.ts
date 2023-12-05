@@ -4,6 +4,7 @@ import { CreatePostService } from '../services/CreatePostService';
 import { PostRepository } from '../repositories/PostRepository';
 import { ListPostService } from '../services/ListPostService';
 import { UpdatePostService } from '../services/UpdatePostService';
+import { DeletePostService } from '../services/DeletePostService';
 
 export default {
   async create(request:Request, response:Response) {
@@ -103,11 +104,9 @@ export default {
         });
       }
 
-      const post = await prisma.post.delete({
-        where: {
-          id: Number(request.params.id)
-        }
-      });
+      const deletePost = new DeletePostService(new PostRepository());
+
+      const post = deletePost.execute(id);
 
       return response.json({
         error: false,
