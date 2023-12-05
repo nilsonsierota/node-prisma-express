@@ -1,18 +1,21 @@
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
 import { prisma } from '../database';
+import { CreatePostService } from '../services/CreatePostService';
+import { PostRepository } from '../repositories/PostRepository';
+import { ListPostService } from '../services/ListPostService';
 
 export default {
   async create(request:Request, response:Response) {
     try {
       const { title, content, userId } = request.body;
 
-      const post = await prisma.post.create({
-        data: {
-          title,
-          content,
-          userId
-        }
-      });
+      const createPost = new CreatePostService(new PostRepository());
+
+      const post = createPost.execute(
+        title,
+        content,
+        userId
+      );
 
       return response.json({
         error: false,
@@ -29,9 +32,9 @@ export default {
     try {
       const { id } = request.params;
 
-      const post = await prisma.post.findUnique({
-        where: { id: Number(id) }
-      });
+      const listPost = new ListPostService(new PostRepository());
+
+      const post = listPost.execute(Number(id));
 
       if(!post){
         return response.json({
