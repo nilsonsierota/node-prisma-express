@@ -3,6 +3,7 @@ import { prisma } from '../database';
 import { CreatePostService } from '../services/CreatePostService';
 import { PostRepository } from '../repositories/PostRepository';
 import { ListPostService } from '../services/ListPostService';
+import { UpdatePostService } from '../services/UpdatePostService';
 
 export default {
   async create(request:Request, response:Response) {
@@ -34,7 +35,7 @@ export default {
 
       const listPost = new ListPostService(new PostRepository());
 
-      const post = listPost.execute(Number(id));
+      const post = listPost.execute(id);
 
       if(!post){
         return response.json({
@@ -68,15 +69,13 @@ export default {
         });
       }
 
-      const post = await prisma.post.update({
-        where: {
-          id: Number(request.body.id)
-        },
-        data: {
-          title,
-          content
-        }
-      });
+      const updatePost = new UpdatePostService(new PostRepository());
+
+      const post = updatePost.execute(
+        id,
+        title,
+        content
+      );
 
       return response.json({
         error: false,

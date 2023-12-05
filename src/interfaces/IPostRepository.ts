@@ -7,5 +7,6 @@ export type Post = {
 
 export interface IPostRepository {
  create(title : string, content : string, userId : number) : Promise<Post>;
- list(id: number) : Promise<Post>
+ list(id: string) : Promise<Post>;
+ update(id: string, title: string, content: string): Promise<Post>;
 }

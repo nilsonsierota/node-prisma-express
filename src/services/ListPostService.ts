@@ -5,7 +5,7 @@ class ListPostService {
     private PostRepository: IPostRepository
   ){}
 
-  public async execute(id: number){
+  public async execute(id: string){
     const post = await this.PostRepository.list(
       id
     );

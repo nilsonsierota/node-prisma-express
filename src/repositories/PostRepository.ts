@@ -14,9 +14,23 @@ class PostRepository implements IPostRepository {
     return post;
   }
 
-  public async list(id: number): Promise<Post> {
+  public async list(id: string): Promise<Post> {
     const post = await prisma.post.findUnique({
       where: { id: Number(id) }
+    });
+
+    return post;
+  }
+
+  public async update(id: string, title: string, content: string){
+    const post = await prisma.post.update({
+      where: {
+        id
+      },
+      data: {
+        title,
+        content
+      }
     });
 
     return post;
